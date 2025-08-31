@@ -135,12 +135,20 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+<<<<<<< HEAD
 img/*
 LDDC/*
 lrc/*
 background/*
 music/*
 
+=======
+img/
+LDDC/
+lrc/
+background/
+music/
+>>>>>>> parent of a271744 (Update .gitignore)
 loved.json
 data.json
 ./background/*
