@@ -1,0 +1,32 @@
+
+.btn {
+    background-color: rgb(195, 7, 63);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    width: 181px;
+    box-sizing: border-box;
+    text-align: center; /* Added for consistency as input type=button centers text by default */
+}
+
+.btn:hover {
+    background-color: rgb(150, 0, 40);
+}
+
+@keyframes scroll-text {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}
+body, html {
+    color: white;
+}

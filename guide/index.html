@@ -1,0 +1,168 @@
+<html>
+<head>
+    <title>Guide</title>
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <script type="text/javascript" src="index.js"></script>
+</head>
+<body style="background-color:#1f1f1f;">
+    <table style="width:70%;">
+        <tr>
+            <th style="width: 10%; text-align: left;">Guide</th>
+            <th style="width:90%;"></th>
+        </tr>
+        <tr>
+            <td style="width:10%;" center>
+                <button class="btn" onclick="unload(`description`)">Menu</button><br>
+                <button class="btn" onclick="unload(`index_html`)">index.html</button><br>
+                <button class="btn" onclick="unload(`index_css`)">index.css</button><br>
+                <button class="btn" onclick="unload(`data_json`)">data.json</button><br>
+                <button class="btn" onclick="unload(`loved_json`)">loved.json</button><br>
+                <button class="btn" onclick="unload(`lrc_format`)">lrc format</button><br>
+                <button class="btn" onclick="unload(`img`)">img</button><br>
+                <button class="btn" onclick="unload(`playmusic_js`)">playmusic.js</button>
+            </td>
+            <td style="width:90%; vertical-align: top;" class="description">
+                <div style="margin-top: 0; color: #fff;"></div>
+                    This guide is to help you to modify and customize the music player.<br>
+                    File structure:
+                    <pre style="background:#222; color:#fff; padding:10px; border-radius:6px;">
+                    ├── index.html
+                    ├── index.css
+                    ├── data.json
+                    ├── loved.json
+                    ├── lrc
+                    ├── img
+                    └── playmusic.js
+                    </pre>
+                    <br>
+                    by Kinglingmk1
+                </div>
+            </td>
+            <td style="width:90%; vertical-align: top;" class="index_html">
+                <div style="margin-top: 0;">
+                    index.html<br>
+                    This is the main HTML and the only page to display and play the music.<br>
+                    "id=lrc" is the table to show the lyrics by pushing tr and td<br>
+                    <br>
+                    There have two song lists<br>
+                    -song-list (a table to show all songs in data.json)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;-songChangeButton<br>
+                    -love-list (a table to show all loved songs in loved.json)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;-songChangeButton<br>
+                </div>
+            </td>
+            <td style="width:90%; vertical-align: top;" class="index_css">
+                <div style="margin-top: 0;">
+                    index.css
+                    Just a simple CSS file to style the player don't want explain it.
+                </div>
+            </td>
+            <td style="width:90%; vertical-align: top;" class="data_json">
+                <div style="margin-top: 0;">
+                    <strong>data.json</strong><br>
+                    Here is the format of <strong>data.json</strong> & <strong>loved.json</strong>:<br><br>
+                    <pre style="background:#222; color:#fff; padding:10px; border-radius:6px;">
+                {
+                    "songs": [
+                        {
+                            "fileNo": int,
+                            "musicName": "String",
+                            "backgroundRGB": "Hexadecimal number RGB"
+                        }
+                    ]
+                }
+                    </pre>
+                    <br>
+                    <strong>Important:</strong> The <code>fileNo</code> must be the same and unique as the music file name, img, and lrc.<br>
+                    <br>
+                    <strong>Example:</strong>
+                    <pre style="background:#222; color:#fff; padding:10px; border-radius:6px;">
+                {
+                    "songs": [
+                        {
+                            "fileNo": 1,
+                            "musicName": "Song 1",
+                            "backgroundRGB": "ff0000"
+                        },
+                        {
+                            "fileNo": 2,
+                            "musicName": "Song 2",
+                            "backgroundRGB": "00ff00"
+                        }
+                    ]
+                }
+                    </pre>
+                </div>
+            </td>
+            <td style="width:90%; vertical-align: top;" class="loved_json">
+                <div style="margin-top: 0;">
+                    loved.json<br>
+                    see data.json
+                </div>
+            </td>
+            <td style="width:90%; vertical-align: top;" class="lrc_format">
+                <div style="margin-top: 0;">
+                    lrc_format<br>
+                    only accept [xx:xx.xx] for lrc and the lrc name is same as the music file name (integer)
+                    <br>
+                    <strong>Example:</strong>
+                    <pre style="background:#222; color:#fff; padding:10px; border-radius:6px;">
+                [00:00.00] Line 1
+                [00:01.00] Line 2
+                [00:02.00] Line 3
+                    </pre>
+                </div>
+            </td>
+            <td style="width:90%; vertical-align: top;" class="img">
+                <div style="margin-top: 0;">
+                    img<br>
+                    only accept the same name as the music file name (integer)<br>
+                    The file format now only accept .jpg, .png, .gif, .jpeg, .webp, .jifi and the best size is 1200x1200<br>
+                    You can modify the js if you want to add more format<br>
+                </div>
+            </td>
+            <td style="width:90%; vertical-align: top;" class="playmusic_js">
+                <div style="margin-top: 0;">
+                    playmusic.js<br>
+                    This file is responsible for playing the music files and handling the player controls.<br>
+                    This pages will show all element and function in this file.<br><br>
+                    <strong>On Load:</strong><br>
+                    - Read the data in data.json and loved.json<br>
+                    - Try load the first song lrc data<br>
+                    - call function songChange() - see below<br>
+
+                    <strong>Functions:</strong><br>
+                    getnowplaying() - Return the path that current playing. Default is /music/1.mp3<br>
+                    getnowimg() - Return the path that current playing image. Default is /img/1.jpg<br>
+                    updatePlaytime() - Display the current song playing time and call loadlrc()<br>
+                    songChange():<br>
+                    - Create the song list and love list button load from JSON data<br>
+                    - Play / Pause the music<br>
+                    - Volume control and display<br>
+                    - Auto play the next song when the current song ended<br>
+                    - End of list will return to the first song<br>
+                    - Check the song is in the love list and display the loved button accordingly<br>
+                    play() - Play the current song and change the button image to pause button<br>
+                    pause() - Pause the current song and change the button image to play button<br> 
+                    backsong() - Detect the current song and play the previous song in the list
+                    nextsong() - Detect the current song and play the next song in the list<br>
+                    setProgress(value) - Set the audio duration of the current song<br>
+                    updateProgressBar() - Update the progress bar based on the current audio time<br>
+                    loadlrc() - Load the LRC file for the current song and display it<br>
+                    <del>love() - Add or remove the current song from the love list and update loved.json</del><br>
+                    <del>saveLovedSong() - Save the current song to the love list and update loved.json</del><br>
+                    <del>removeLovedSong() - Remove the current song from the love list and update loved.json</del><br>
+                    showLovedSong() - Switch between showing loved songs and all songs <br>
+                    createLrcElement(time, text) - Create a table row for each line of the LRC file<br>
+                    setVolume(value) - Set the volume of the audio player
+
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:30%;"></td>
+            <td style="width:70%;"></td>
+        </tr>
+    </table>
+</body>
+</html>

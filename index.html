@@ -1,0 +1,105 @@
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Music Player</title>
+    <link rel="stylesheet" href="index.css">
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <script type="text/javascript" src="playmusic.js"></script>
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://anime.kinglingmk1.com/video/music/index.html">
+    <meta property="og:title" content="Music Player">
+    <meta property="og:description" content="Enjoy and listen this not secure music web (only me not secure)">
+    <meta property="og:image" content="https://anime.kinglingmk1.com/video/music/img/1.jpg">
+</head>
+<body style="background-size: cover; background-repeat: no-repeat; background-color:rgb(28, 29, 34);">
+    <div>
+        <table id="song-lrc" style="width:20%">
+            <thead>
+                <tr>
+                </tr>
+            </thead>
+            <tbody id="lrc">
+                <!-- Song word -->
+            </tbody>
+        </table>
+    </div>
+    <div style="display: flex; justify-content: center; align-items: flex-start; gap: 20px; margin: 5% auto auto auto;">
+        <!-- Existing Music Player Table -->
+        <div>
+            <table id="song-img" style="text-align: center;">
+                <tr>
+                    <td>
+                        <img id="background-image" style="width: 35%; height: auto; border-radius: 10px;" alt="Background Image">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="height: 66px; width: auto;">
+                        <h1 id="music-name" style="color: white; font-family: Arial, Helvetica, sans-serif; height: 66px; width: auto; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);"></h1>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h2 id="playtime" style="color: white; font-family: Arial, Helvetica, sans-serif; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">0:00</h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input id="progress-bar" type="range" min="0" max="100" value="0" style="width:20%; height: 10px; background-color: #ccc; border-radius: 5px; cursor: pointer;" onchange="setProgress(this.value)">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="display: flex; justify-content: center; align-items: center;">
+                        <img class="smallbtn" src="button/backward.png" alt="Back" style="height: 25px; width:auto;" onclick="backsong()">
+                        <img src="button/empty.png" style="width: 25px; height: auto;">
+                        <img class="smallbtn" id="playBtn" src="button/play.png" alt="Play" style="width: 25px; height: auto;" onclick="play()">
+                        <img class="smallbtn" id="pauseBtn" src="button/pause.png" alt="Pause" style="width: 25px; height: auto;" onclick="pause()">
+                        <img src="button/empty.png" style="width: 25px; height: auto;">
+                        <img class="smallbtn" src="button/forward.png" alt="Next" style="width: 25px; height: auto;" onclick="nextsong()">
+                        <img src="button/empty.png" style="width: 25px; height: auto;">
+                        <img class="smallbtn" src="button/heart_off.png" alt="Heart" style="width: 25px; height: auto;" onclick="love()">
+                        <img src="button/empty.png" style="width: 25px; height: auto;">
+                        <img class="smallbtn" src="button/list.png" alt="Heart" style="width: 25px; height: auto;" onclick="showLovedSong()">
+                        <div style="display:none;">Loved Song</div></img>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="display: flex; justify-content: center; align-items: center;">
+                        <input id="volume-bar" type="range" min="0" max="100" value="50" 
+       style="width:10%; height: 10px; background-color: #ccc; border-radius: 5px; cursor: pointer;" 
+       oninput="setVolume(this.value)">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="display:none;"><button class="smallbtn" id="loved-song-btn" onclick="showLovedSong()">Loved Song</button></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div>
+            <table id="song-list" style="width:20%" class="songChangeButton">
+                <thead>
+                    <tr>
+                    </tr>
+                </thead>
+                <tbody id="songChangeButton">
+                    <!-- Song list will be dynamically populated -->
+                </tbody>
+            </table>
+            <table id="loved-list" style="width:20%" class="lovedSongChangeButton">
+                <thead>
+                    <tr>
+                    </tr>
+                </thead>
+                <tbody id="songChangeButton">
+                    <!-- Song list will be dynamically populated -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div id="content">
+  <canvas id="canvas"></canvas>
+</div>
+</body>
+</html>
