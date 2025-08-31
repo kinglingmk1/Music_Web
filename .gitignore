@@ -136,15 +136,11 @@ dist
 .pnp.*
 
 img/*
-!img/
 LDDC/*
-!LDDC/
 lrc/*
-!lrc/
 background/*
-!background/
 music/*
-!music/
+
 loved.json
 data.json
 ./background/*
