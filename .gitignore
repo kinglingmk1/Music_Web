@@ -135,10 +135,10 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-./LDDC
-./music
-./img
-./lrc
+./LDDC/*
+./music/*
+./img/*
+./lrc/*
 loved.json
 data.json
-./background
+./background/*
