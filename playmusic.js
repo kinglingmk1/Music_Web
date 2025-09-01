@@ -732,7 +732,7 @@ function renderline() {
         ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
         var x = 0;
         for (var i = 0; i < bufferLength; i++) {
-            var barHeight = dataArray[i];
+            var barHeight = dataArray[i]*2.3
             // Get background color from current song
             let bgColor = lovedStatus
                 ? lovedData.songs.find(song => song.fileNo === count)?.backgroundRGB
@@ -756,3 +756,26 @@ function renderline() {
     }
     renderFrame();
 }
+
+function scrollUp(event) {
+    event.preventDefault();
+    let list;
+    if (document.querySelector(".songChangeButton").style.display === "none") {
+        list = document.querySelector(".lovedSongChangeButton");
+    } else {
+        list = document.querySelector(".songChangeButton");
+    }
+    list.scrollBy({ top: -300, behavior: 'smooth' });
+}
+
+function scrollDown(event) {
+    event.preventDefault();
+    let list;
+    if (document.querySelector(".songChangeButton").style.display === "none") {
+        list = document.querySelector(".lovedSongChangeButton");
+    } else {
+        list = document.querySelector(".songChangeButton");
+    }
+    list.scrollBy({ top: 300, behavior: 'smooth' });
+}
+
