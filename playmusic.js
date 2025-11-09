@@ -24,8 +24,8 @@ let lrcCache = {};
 let errTimeout = 0;
 let isChangingSong = false;
 
-const timeout = location.hostname === "anime.kinglingmk1.com" ? 500 : 50;
-const timeout_lrc = location.hostname === "anime.kinglingmk1.com" ? 500 : 50;
+const timeout = location.hostname === "127.0.0.1" ? 500 : 50;
+const timeout_lrc = location.hostname === "127.0.0.1" ? 500 : 50;
 
 //"fileNo": 1,"musicName": "月並みに輝け","backgroundRGB": "020001" -> [1,"月並みに輝け","020001"]
 //forloop read and input
@@ -33,6 +33,7 @@ const imageType = ['jpg', 'png', 'gif', 'jpeg', 'webp', 'jfif'];
 window.onload = function() {
     let button1 = document.getElementById('loved-list');
     button1.style.display = 'hidden';
+    play();
 }
 
 async function getnowplaying(inCount) {
@@ -75,7 +76,7 @@ async function getnowimg() {
             clearTimeout(timeoutId);
             if (response.ok) {
                 if (requestId === currentImageRequestId) {
-                    metaOg.setAttribute('content', `https://anime.kinglingmk1.com/video/music/${fullPath}`);
+                    //gg
                 }
                 return fullPath;
             }
@@ -84,7 +85,7 @@ async function getnowimg() {
         }
     }
     if (requestId === currentImageRequestId) {
-        metaOg.setAttribute('content', `https://anime.kinglingmk1.com/video/music/${imgPath}.jpg`);
+        //gg
     }
     return `${imgPath}.jpg`;
 }
@@ -137,7 +138,7 @@ async function changeBackground(num) {
                 bgImg.src = fullPath;
                 document.body.style.backgroundImage = '';
                 document.body.style.filter = '';
-                metaOg.setAttribute('content', `https://local.kinglingmk1.com/video/music/${fullPath}`);
+                //gg
                 return fullPath;
             }
         } catch (error) {
@@ -151,7 +152,7 @@ async function changeBackground(num) {
     if (bgImg) {
         bgImg.src = fallbackPath;
     }
-    metaOg.setAttribute('content', `https://anime.kinglingmk1.com/video/music/${fallbackPath}`);
+    //gg
     return fallbackPath;
 }
 //song change image and song
@@ -369,6 +370,7 @@ function play() {
         start = true;
         songChange()
     }
+    console.log(audio.src);
 }
 function pause() {
     pauseButton = document.getElementById('pauseBtn');
@@ -377,7 +379,9 @@ function pause() {
     playButton.style.display = 'block';
     if(audio && typeof audio.pause === 'function'){
         audio.pause();
+        start = true;
     }
+    console.log(audio.src);
 }
 let loveCount = 0;
 function backsong() {
@@ -440,7 +444,10 @@ function nextsong() {
             let nextIndex = (currentIndex + 1) % fileNoArray.length;
             count = fileNoArray[nextIndex];
         }
-        loveCount++;
+        //get now playing song index in lovedData
+        let nowPlayingIndex = lovedData.songs.findIndex(song => song.fileNo === count);
+        loveCount = nowPlayingIndex;
+        //loveCount++;
         if(loveCount >= document.getElementsByClassName('loved-song-button').length) {
             loveCount = 0;
         }
@@ -509,7 +516,7 @@ function love() {
 }
 
 async function saveLovedSong(lovedssSong) {
-    await fetch('http://127.0.0.1:3000/api/loved-songs', {
+    /*await fetch('http://127.0.0.1:3000/api/loved-songs', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -519,11 +526,12 @@ async function saveLovedSong(lovedssSong) {
     // Reload lovedData and update loved song list in HTML
     const responseLove = await fetch('loved.json');
     lovedData = await responseLove.json();
-    updateLovedSongList();
+    updateLovedSongList();*/
+    return;
 }
 
 async function removeLovedSong(fileNo) {
-    await fetch('http://127.0.0.1:3000/api/loved-songs', {
+    /*await fetch('http://127.0.0.1:3000/api/loved-songs', {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json'
@@ -533,7 +541,8 @@ async function removeLovedSong(fileNo) {
     // Reload lovedData and update loved song list in HTML
     const responseLove = await fetch('loved.json');
     lovedData = await responseLove.json();
-    updateLovedSongList();
+    updateLovedSongList();*/
+    return;
 }
 
 // Helper to update loved song list in HTML
@@ -585,6 +594,11 @@ function showLovedSong() {
     const normalList = document.getElementsByClassName('songChangeButton');
     const lovedList = document.getElementsByClassName('lovedSongChangeButton');
     if (lovedSongButton.textContent.includes("Loved Song")) {
+        let lovedSongs = lovedData.songs || [];
+        if (lovedSongs.length === 0) {
+            return;
+        }
+
         const imgElement = document.getElementById('background-image');
         const musicNameElement = document.getElementById('music-name');
         const lovedSongButton = document.getElementById('loved-song-btn');
@@ -605,7 +619,7 @@ function showLovedSong() {
             lovedList[i].style.display = 'block';
         }
         // Populate lovedList from localStorage
-        let lovedSongs = lovedData.songs || [];
+        
         const lovedListContainer = document.getElementById('loved-list');
         lovedListContainer.innerHTML = '';
         lovedSongs.forEach((lovedSong) => {
