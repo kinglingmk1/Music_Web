@@ -23,6 +23,8 @@ let windowsonLoad = true;
 let lrcCache = {};
 let errTimeout = 0;
 let isChangingSong = false;
+let randomStatus = false;
+let replayStatus = false;
 
 const timeout = location.hostname === "127.0.0.1" ? 500 : 50;
 const timeout_lrc = location.hostname === "127.0.0.1" ? 500 : 50;
@@ -35,7 +37,16 @@ window.onload = function() {
     button1.style.display = 'hidden';
     play();
 }
-
+function randomOnOff() {
+    let randomBtn = document.getElementById('randomBtn');
+    if (randomStatus == false) {
+        randomStatus = true;
+        randomBtn.src = 'button/random_clicked.png';
+    } else {
+        randomStatus = false;
+        randomBtn.src = 'button/random.png';
+    }
+}
 async function getnowplaying(inCount) {
     const musicPath = "music/" + inCount;
     for (const ext of ['flac', 'wma', 'mp3', 'm4a']) {
@@ -183,6 +194,7 @@ async function songChange() {
         button.style.borderRadius = '5px';
         button.style.fontSize = '16px';
         button.style.fontWeight = 'bold';
+        button.style.fontFamily = "'Noto Sans JP', Arial, sans-serif";
         button.style.transition = 'background-color 0.3s ease';
         button.style.width = '100%';
         button.style.boxSizing = 'border-box';
@@ -223,6 +235,7 @@ async function songChange() {
             lovedButton.style.borderRadius = '5px';
             lovedButton.style.fontSize = '16px';
             lovedButton.style.fontWeight = 'bold';
+            lovedButton.style.fontFamily = "'Noto Sans JP', Arial, sans-serif";
             lovedButton.style.transition = 'background-color 0.3s ease';
             lovedButton.style.width = '100%';
             lovedButton.style.boxSizing = 'border-box';
@@ -275,7 +288,10 @@ async function songChange() {
         audio = new Audio(await getnowplaying(count));
         audio.volume = volumeBar.value / 100;
         updatePlaytime();
-        audio.addEventListener('ended', () => { nextsong(); });
+        audio.addEventListener('ended', () => { 
+            if(!checkisReplay())
+                nextsong();
+        });
         audio.addEventListener('timeupdate', updateProgressBar);
         const progressBar = document.getElementById('progress-bar');
         progressBar.addEventListener('input', (event) => { setProgress(event.target.value); });
@@ -306,7 +322,10 @@ async function songChange() {
         audio = new Audio(await getnowplaying(count));
         audio.volume = volumeBar.value / 100;
         updatePlaytime();
-        audio.addEventListener('ended', () => { nextsong(); });
+        audio.addEventListener('ended', () => { 
+            if(!checkisReplay())
+                nextsong(); 
+        });
         audio.addEventListener('timeupdate', updateProgressBar);
         const progressBar = document.getElementById('progress-bar');
         progressBar.addEventListener('input', (event) => { setProgress(event.target.value); });
@@ -393,6 +412,13 @@ function backsong() {
             count = data.songs.length;
             document.getElementsByClassName('song-button')[count - 1].click();
         }
+        if(randomStatus == true) {
+            let randomIndex;
+            do{
+                randomIndex = Math.floor(crypto.getRandomValues(new Uint32Array(1))[0] / (0xFFFFFFFF + 1) * data.songs.length);
+            }while(randomIndex + 1 == count);
+            count = randomIndex + 1;
+        }
         pauseButton = document.getElementById('pauseBtn');
         playButton = document.getElementById('playBtn');
         pauseButton.style.display = 'block';
@@ -409,6 +435,14 @@ function backsong() {
             count = fileNoArray[prevIndex];
             loveCount = prevIndex;
         }
+        if(randomStatus == true) {
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(crypto.getRandomValues(new Uint32Array(1))[0] / (0xFFFFFFFF + 1) * lovedData.songs.length);
+            } while (fileNoArray[randomIndex] == count);
+            count = fileNoArray[randomIndex];
+            loveCount = randomIndex;
+        }
         document.getElementsByClassName('loved-song-button')[loveCount].click();
         pauseButton = document.getElementById('pauseBtn');
         playButton = document.getElementById('playBtn');
@@ -420,14 +454,30 @@ function backsong() {
 function nextsong() {
     if(lovedStatus == false){
         if (count < data.songs.length) {
-            count++;
+            if(randomStatus == true) {
+                let randomIndex;
+                do{
+                    randomIndex = Math.floor(crypto.getRandomValues(new Uint32Array(1))[0] / (0xFFFFFFFF + 1) * data.songs.length);
+                } while(randomIndex + 1 == count);
+                count = randomIndex + 1;
+            } else {
+                count++;
+            }
             document.getElementsByClassName('song-button')[count-1].click();
             pauseButton = document.getElementById('pauseBtn');
             playButton = document.getElementById('playBtn');
             pauseButton.style.display = 'block';
             playButton.style.display = 'none';
         } else {
-            count = 1;
+            if(randomStatus == true) {
+                let randomIndex;
+                do{
+                    randomIndex = Math.floor(crypto.getRandomValues(new Uint32Array(1))[0] / (0xFFFFFFFF + 1) * data.songs.length);
+                } while(randomIndex + 1 == count);
+                count = randomIndex + 1;
+            } else {
+                count = 1;
+            }
             document.getElementsByClassName('song-button')[count-1].click();
             pauseButton = document.getElementById('pauseBtn');
             playButton = document.getElementById('playBtn');
@@ -444,6 +494,13 @@ function nextsong() {
             let nextIndex = (currentIndex + 1) % fileNoArray.length;
             count = fileNoArray[nextIndex];
         }
+        if(randomStatus == true) {
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(crypto.getRandomValues(new Uint32Array(1))[0] / (0xFFFFFFFF + 1) * lovedData.songs.length);
+            } while (fileNoArray[randomIndex] == count);
+            count = fileNoArray[randomIndex];
+        }
         //get now playing song index in lovedData
         let nowPlayingIndex = lovedData.songs.findIndex(song => song.fileNo === count);
         loveCount = nowPlayingIndex;
@@ -456,7 +513,6 @@ function nextsong() {
             playButton = document.getElementById('playBtn');
             pauseButton.style.display = 'block';
             playButton.style.display = 'none';
-        
     }
 }
 function setProgress(value) {
@@ -563,6 +619,7 @@ function updateLovedSongList() {
         lovedButton.style.borderRadius = '5px';
         lovedButton.style.fontSize = lovedButton.textContent.length > 10 ? '14px' : '16px';
         lovedButton.style.fontWeight = 'bold';
+        lovedButton.style.fontFamily = "'Noto Sans JP', Arial, sans-serif";
         lovedButton.style.transition = 'background-color 0.3s ease';
         lovedButton.style.width = '100%';
         lovedButton.style.boxSizing = 'border-box';
@@ -633,6 +690,7 @@ function showLovedSong() {
             lovedButton.style.margin = '5px';
             lovedButton.style.cursor = 'pointer';
             lovedButton.style.borderRadius = '5px';
+            lovedButton.style.fontFamily = "'Noto Sans JP', Arial, sans-serif";
             //if text longer then 10 characters
             if (lovedButton.textContent.length > 10) {
                 lovedButton.style.fontSize = '14px';
@@ -711,6 +769,7 @@ function createLrcElement(time, text) {
             lrcp.style.fontSize = '20px';
             lrcp.style.fontWeight = 'bold';
             lrcp.style.color = 'white';
+            lrcp.style.fontFamily = "'Noto Sans JP', Arial, sans-serif";
             lrcp.style.textShadow = '2px 2px 4px black';
             lrcp.style.margin = '0px';
             lrcp.style.padding = '0px';
@@ -792,4 +851,31 @@ function scrollDown(event) {
     }
     list.scrollBy({ top: 300, behavior: 'smooth' });
 }
-
+function replayOnOff(){
+    let replayBtn = document.getElementById('replayBtn');
+    if (replayStatus == false) {
+        replayStatus = true;
+        replayBtn.src = 'button/replay_clicked.png';
+    } else {
+        replayStatus = false;
+        replayBtn.src = 'button/replay.png';
+    }
+}
+function checkisReplay(){
+    if(replayStatus == true) {
+        if(lovedStatus == false){
+            document.getElementsByClassName('song-button')[count - 1].click();
+        }
+        else {
+            loveCount = lovedData.songs.findIndex(song => song.fileNo === count);
+            document.getElementsByClassName('loved-song-button')[loveCount].click();
+        }
+        pauseButton = document.getElementById('pauseBtn');
+        playButton = document.getElementById('playBtn');
+        pauseButton.style.display = 'block';
+        playButton.style.display = 'none';
+        return true;
+    } else {
+        return false;
+    }
+}
