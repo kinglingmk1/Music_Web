@@ -90,3 +90,60 @@
     z-index: 10;
     pointer-events: none;
 }
+
+/* ===== Refactor CSS Classes ===== */
+
+/* Playlist button base styles */
+.playlist-button {
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: 'Noto Sans JP', Arial, sans-serif;
+    transition: background-color 0.3s ease, filter 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: left;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.playlist-button:hover {
+    filter: brightness(1.2);
+}
+
+.playlist-button:active {
+    filter: brightness(0.9);
+}
+
+.playlist-button.long-text {
+    font-size: 14px;
+}
+
+/* Background blur layer */
+.bg-blur {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -1;
+    filter: blur(16px) brightness(0.4) grayscale(0.2);
+    pointer-events: none;
+}
+
+/* Lyrics text */
+.lrc-line {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    font-family: 'Noto Sans JP', Arial, sans-serif;
+    text-shadow: 2px 2px 4px black;
+    margin: 0;
+    padding: 0;
+}
