@@ -183,21 +183,11 @@ async function songChange() {
         //create a button for each song
         const button = document.createElement('button');
         button.textContent = song.musicName;
-        button.classList.add('song-button');
-        //each button same color as the song background color
+        button.classList.add('song-button', 'playlist-button');
+        if (song.musicName.length > 10) {
+            button.classList.add('long-text');
+        }
         button.style.backgroundColor = `#${song.backgroundRGB}`;
-        button.style.color = 'white';
-        button.style.border = 'none';
-        button.style.padding = '10px 20px';
-        button.style.margin = '5px';
-        button.style.cursor = 'pointer';
-        button.style.borderRadius = '5px';
-        button.style.fontSize = '16px';
-        button.style.fontWeight = 'bold';
-        button.style.fontFamily = "'Noto Sans JP', Arial, sans-serif";
-        button.style.transition = 'background-color 0.3s ease';
-        button.style.width = '100%';
-        button.style.boxSizing = 'border-box';
         button.addEventListener('mouseover', () => {
             button.style.backgroundColor = `#${song.backgroundRGB}88`;
         });
@@ -225,20 +215,11 @@ async function songChange() {
         lovedData.songs.forEach((lovedSong) => {
             const lovedButton = document.createElement('button');
             lovedButton.textContent = lovedSong.name;
-            lovedButton.classList.add('loved-song-button');
+            lovedButton.classList.add('loved-song-button', 'playlist-button');
+            if (lovedSong.name && lovedSong.name.length > 10) {
+                lovedButton.classList.add('long-text');
+            }
             lovedButton.style.backgroundColor = `#${lovedSong.backgroundRGB}`;
-            lovedButton.style.color = 'white';
-            lovedButton.style.border = 'none';
-            lovedButton.style.padding = '10px 20px';
-            lovedButton.style.margin = '5px';
-            lovedButton.style.cursor = 'pointer';
-            lovedButton.style.borderRadius = '5px';
-            lovedButton.style.fontSize = '16px';
-            lovedButton.style.fontWeight = 'bold';
-            lovedButton.style.fontFamily = "'Noto Sans JP', Arial, sans-serif";
-            lovedButton.style.transition = 'background-color 0.3s ease';
-            lovedButton.style.width = '100%';
-            lovedButton.style.boxSizing = 'border-box';
             lovedButton.addEventListener('mouseover', () => {
                 lovedButton.style.backgroundColor = `#${lovedSong.backgroundRGB}88`;
             });
@@ -609,20 +590,11 @@ function updateLovedSongList() {
     (lovedData.songs || []).forEach((lovedSong) => {
         const lovedButton = document.createElement('button');
         lovedButton.textContent = lovedSong.musicName;
-        lovedButton.classList.add('loved-song-button');
+        lovedButton.classList.add('loved-song-button', 'playlist-button');
+        if (lovedSong.musicName && lovedSong.musicName.length > 10) {
+            lovedButton.classList.add('long-text');
+        }
         lovedButton.style.backgroundColor = `#${lovedSong.backgroundRGB}`;
-        lovedButton.style.color = 'white';
-        lovedButton.style.border = 'none';
-        lovedButton.style.padding = '10px 20px';
-        lovedButton.style.margin = '5px';
-        lovedButton.style.cursor = 'pointer';
-        lovedButton.style.borderRadius = '5px';
-        lovedButton.style.fontSize = lovedButton.textContent.length > 10 ? '14px' : '16px';
-        lovedButton.style.fontWeight = 'bold';
-        lovedButton.style.fontFamily = "'Noto Sans JP', Arial, sans-serif";
-        lovedButton.style.transition = 'background-color 0.3s ease';
-        lovedButton.style.width = '100%';
-        lovedButton.style.boxSizing = 'border-box';
         lovedButton.addEventListener('mouseover', () => {
             lovedButton.style.backgroundColor = `#${lovedSong.backgroundRGB}88`;
         });
@@ -682,25 +654,11 @@ function showLovedSong() {
         lovedSongs.forEach((lovedSong) => {
             const lovedButton = document.createElement('button');
             lovedButton.textContent = lovedSong.musicName;
-            lovedButton.classList.add('loved-song-button');
-            lovedButton.style.backgroundColor = `#${lovedSong.backgroundRGB}`;
-            lovedButton.style.color = 'white';
-            lovedButton.style.border = 'none';
-            lovedButton.style.padding = '10px 20px';
-            lovedButton.style.margin = '5px';
-            lovedButton.style.cursor = 'pointer';
-            lovedButton.style.borderRadius = '5px';
-            lovedButton.style.fontFamily = "'Noto Sans JP', Arial, sans-serif";
-            //if text longer then 10 characters
+            lovedButton.classList.add('loved-song-button', 'playlist-button');
             if (lovedButton.textContent.length > 10) {
-                lovedButton.style.fontSize = '14px';
-            } else {
-                lovedButton.style.fontSize = '16px';
+                lovedButton.classList.add('long-text');
             }
-            lovedButton.style.fontWeight = 'bold';
-            lovedButton.style.transition = 'background-color 0.3s ease';
-            lovedButton.style.width = '100%';
-            lovedButton.style.boxSizing = 'border-box';
+            lovedButton.style.backgroundColor = `#${lovedSong.backgroundRGB}`;
             lovedButton.addEventListener('mouseover', () => {
                 lovedButton.style.backgroundColor = `#${lovedSong.backgroundRGB}88`;
             });
@@ -761,23 +719,16 @@ function createLrcElement(time, text) {
     }
     const lrctr = document.createElement('tr');
     const lrcp = document.createElement('p');
+    lrcp.classList.add('lrc-line');
     text.forEach((line) => {
         if (line.includes(time) && time !== checkline) {
             checkline = time;
             lrcp.textContent = line.split(']')[1];
-            lrcp.style.textAlign = 'center';
-            lrcp.style.fontSize = '20px';
-            lrcp.style.fontWeight = 'bold';
-            lrcp.style.color = 'white';
-            lrcp.style.fontFamily = "'Noto Sans JP', Arial, sans-serif";
-            lrcp.style.textShadow = '2px 2px 4px black';
-            lrcp.style.margin = '0px';
-            lrcp.style.padding = '0px';
             const lrcElement = document.getElementById('lrc');
             lrcElement.insertBefore(lrctr, lrcElement.firstChild);
             lrctr.appendChild(lrcp);
         }
-    });  
+    });
 }
 function setVolume(value) {
     volume = value / 100;

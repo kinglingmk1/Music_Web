@@ -1,3 +1,55 @@
+/* ===== Resolution Scaling System =====
+   Baseline: 1080p (1920x1080)
+   Scale factor: calc(100vh / 1080) = 1 unit per 1080p pixel
+   Usage: calc(var(--scale) * [size-at-1080p])
+   
+   At 1080p: --scale = 100vh/1080 ≈ 0.0926vh per px → 16px = calc(0.0926 * 16) ≈ 1.48vh
+   At 1440p: elements scale up by 1.33x automatically
+   At 2160p (4K): elements scale up by 2x automatically
+*/
+:root {
+    --scale: calc(100vh / 1080);
+    
+    /* Base sizes (values represent 1080p pixel equivalents) */
+    --font-xs: calc(var(--scale) * 12);
+    --font-sm: calc(var(--scale) * 14);
+    --font-md: calc(var(--scale) * 16);
+    --font-lg: calc(var(--scale) * 20);
+    --font-xl: calc(var(--scale) * 24);
+    --font-2xl: calc(var(--scale) * 32);
+    
+    /* Icon/button sizes */
+    --icon-sm: calc(var(--scale) * 25);
+    --icon-md: calc(var(--scale) * 35);
+    --icon-lg: calc(var(--scale) * 50);
+    
+    /* Spacing */
+    --space-xs: calc(var(--scale) * 5);
+    --space-sm: calc(var(--scale) * 8);
+    --space-md: calc(var(--scale) * 10);
+    --space-lg: calc(var(--scale) * 20);
+    --space-xl: calc(var(--scale) * 40);
+    
+    /* Layout */
+    --border-radius: calc(var(--scale) * 5);
+    --border-radius-lg: calc(var(--scale) * 10);
+    --list-top: calc(var(--scale) * 80);
+    --canvas-height: calc(var(--scale) * 250);
+    --progress-height: calc(var(--scale) * 10);
+    --button-padding-v: calc(var(--scale) * 12);
+    --button-padding-h: calc(var(--scale) * 18);
+    --song-btn-padding-v: calc(var(--scale) * 10);
+    --song-btn-padding-h: calc(var(--scale) * 20);
+    
+    /* H1 title height */
+    --title-height: calc(var(--scale) * 66);
+    
+    /* Album art size */
+    --album-size: calc(var(--scale) * 400);
+    --progress-width: calc(var(--scale) * 200);
+    --volume-width: calc(var(--scale) * 100);
+}
+
 /* Font Face Declarations */
 @font-face {
     font-family: 'Noto Sans JP';
@@ -34,8 +86,8 @@
 }
 #song-list, #loved-list {
     position: absolute;
-    top: 80px;
-    right: 8px;
+    top: var(--list-top);
+    right: var(--space-sm);
     overflow:hidden;
     overflow-y:scroll;
     display: block;
@@ -48,7 +100,7 @@
 }
 #song-lrc {
     position: absolute;
-    top: 80px;
+    top: var(--list-top);
     right: 75%;
     overflow:hidden;
     overflow-y:scroll;
@@ -86,22 +138,21 @@
     left: 0;
     bottom: 0;
     width: 100%;
-    height: 250px;
+    height: var(--canvas-height);
     z-index: 10;
     pointer-events: none;
 }
 
 /* ===== Refactor CSS Classes ===== */
 
-/* Playlist button base styles */
 .playlist-button {
     color: white;
     border: none;
-    padding: 10px 20px;
-    margin: 5px;
+    padding: var(--song-btn-padding-v) var(--song-btn-padding-h);
+    margin: var(--space-xs);
     cursor: pointer;
-    border-radius: 5px;
-    font-size: 16px;
+    border-radius: var(--border-radius);
+    font-size: var(--font-md);
     font-weight: bold;
     font-family: 'Noto Sans JP', Arial, sans-serif;
     transition: background-color 0.3s ease, filter 0.2s ease;
@@ -120,7 +171,7 @@
 }
 
 .playlist-button.long-text {
-    font-size: 14px;
+    font-size: var(--font-sm);
 }
 
 /* Background blur layer */
@@ -136,14 +187,89 @@
     pointer-events: none;
 }
 
-/* Lyrics text */
 .lrc-line {
     text-align: center;
-    font-size: 20px;
+    font-size: var(--font-lg);
     font-weight: bold;
     color: white;
     font-family: 'Noto Sans JP', Arial, sans-serif;
     text-shadow: 2px 2px 4px black;
     margin: 0;
     padding: 0;
+}
+
+.album-image {
+    width: var(--album-size);
+    height: auto;
+    border-radius: var(--border-radius-lg);
+}
+
+.music-title {
+    color: white;
+    height: var(--title-height);
+    width: auto;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-size: var(--font-2xl);
+}
+
+.playtime-text {
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-size: var(--font-xl);
+}
+
+.control-icon {
+    width: var(--icon-sm);
+    height: auto;
+}
+
+.control-spacer {
+    width: var(--icon-sm);
+    height: auto;
+}
+
+.progress-bar {
+    width: var(--progress-width);
+    height: var(--progress-height);
+    background-color: #ccc;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+}
+
+.volume-bar {
+    width: var(--volume-width);
+    height: var(--progress-height);
+    background-color: #ccc;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+}
+
+.scroll-button {
+    position: fixed;
+    bottom: var(--space-xl);
+    z-index: 1000;
+    padding: var(--button-padding-v) var(--button-padding-h);
+    font-size: var(--font-lg);
+    border-radius: 50%;
+    background: #222;
+    color: #fff;
+    border: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    cursor: pointer;
+}
+
+#up-button {
+    right: calc(var(--scale) * 100);
+}
+
+#down-button {
+    right: var(--space-lg);
+}
+
+.player-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: var(--space-lg);
+    margin: 5% auto auto auto;
 }

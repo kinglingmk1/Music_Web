@@ -20,54 +20,52 @@
             </tbody>
         </table>
     </div>
-    <div style="display: flex; justify-content: center; align-items: flex-start; gap: 20px; margin: 5% auto auto auto;">
+    <div class="player-container">
         <!-- Existing Music Player Table -->
         <div>
             <table id="song-img" style="text-align: center;">
                 <tr>
                     <td>
-                        <img id="background-image" style="width: 35%; height: auto; border-radius: 10px;" alt="Background Image">
-                    </td>
-                </tr>
-                <tr>
-                    <td style="height: 66px; width: auto;">
-                        <h1 id="music-name" style="color: white; height: 66px; width: auto; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);"></h1>
+                        <img id="background-image" class="album-image" alt="Background Image">
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <h2 id="playtime" style="color: white; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">0:00</h2>
+                        <h1 id="music-name" class="music-title"></h1>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <input id="progress-bar" type="range" min="0" max="100" value="0" style="width:20%; height: 10px; background-color: #ccc; border-radius: 5px; cursor: pointer;" onchange="setProgress(this.value)">
+                        <h2 id="playtime" class="playtime-text">0:00</h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input id="progress-bar" class="progress-bar" type="range" min="0" max="100" value="0" onchange="setProgress(this.value)">
                     </td>
                 </tr>
                 <tr>
                     <td style="display: flex; justify-content: center; align-items: center;">
-                        <img class="smallbtn" src="button/backward.png" alt="Back" style="height: 25px; width:auto;" onclick="backsong()">
-                        <img src="button/empty.png" style="width: 25px; height: auto;">
-                        <img class="smallbtn" id="playBtn" src="button/play.png" alt="Play" style="width: 25px; height: auto;" onclick="play()">
-                        <img class="smallbtn" id="pauseBtn" src="button/pause.png" alt="Pause" style="width: 25px; height: auto;" onclick="pause()">
-                        <img src="button/empty.png" style="width: 25px; height: auto;">
-                        <img class="smallbtn" src="button/forward.png" alt="Next" style="width: 25px; height: auto;" onclick="nextsong()">
-                        <img src="button/empty.png" style="width: 25px; height: auto;">
-                        <img class="smallbtn" src="button/heart_off.png" alt="Heart" style="width: 25px; height: auto;" onclick="love()">
-                        <img src="button/empty.png" style="width: 25px; height: auto;">
-                        <img class="smallbtn" src="button/list.png" alt="Heart" style="width: 25px; height: auto;" onclick="showLovedSong()">
-                        <img src="button/empty.png" style="width: 25px; height: auto;">
-                        <img class="smallbtn" src="button/random.png" alt="Heart" id="randomBtn" style="width: 25px; height: auto;" onclick="randomOnOff()">
-                        <img src="button/empty.png" style="width: 25px; height: auto;">
-                        <img class="smallbtn" src="button/replay.png" alt="Heart" id="replayBtn" style="width: 25px; height: auto;" onclick="replayOnOff()">
+                        <img class="smallbtn control-icon" src="button/backward.png" alt="Back" onclick="backsong()">
+                        <img class="control-spacer" src="button/empty.png">
+                        <img class="smallbtn control-icon" id="playBtn" src="button/play.png" alt="Play" onclick="play()">
+                        <img class="smallbtn control-icon" id="pauseBtn" src="button/pause.png" alt="Pause" onclick="pause()">
+                        <img class="control-spacer" src="button/empty.png">
+                        <img class="smallbtn control-icon" src="button/forward.png" alt="Next" onclick="nextsong()">
+                        <img class="control-spacer" src="button/empty.png">
+                        <img class="smallbtn control-icon" src="button/heart_off.png" alt="Heart" onclick="love()">
+                        <img class="control-spacer" src="button/empty.png">
+                        <img class="smallbtn control-icon" src="button/list.png" alt="Heart" onclick="showLovedSong()">
+                        <img class="control-spacer" src="button/empty.png">
+                        <img class="smallbtn control-icon" src="button/random.png" alt="Heart" id="randomBtn" onclick="randomOnOff()">
+                        <img class="control-spacer" src="button/empty.png">
+                        <img class="smallbtn control-icon" src="button/replay.png" alt="Heart" id="replayBtn" onclick="replayOnOff()">
                         <div style="display:none;">Loved Song</div></img>
                     </td>
                 </tr>
                 <tr>
                     <td style="display: flex; justify-content: center; align-items: center;">
-                        <input id="volume-bar" type="range" min="0" max="100" value="50" 
-       style="width:10%; height: 10px; background-color: #ccc; border-radius: 5px; cursor: pointer;" 
-       oninput="setVolume(this.value)">
+                        <input id="volume-bar" class="volume-bar" type="range" min="0" max="100" value="50" oninput="setVolume(this.value)">
                     </td>
                 </tr>
                 <tr>
@@ -103,8 +101,7 @@
   <canvas id="canvas"></canvas>
 </div>
 <!-- Floating Up/Down Buttons -->
-<button id="up-button" onclick="scrollUp(event)" style="position: fixed; bottom: 40px; right: 100px; z-index: 1000; padding: 12px 18px; font-size: 20px; border-radius: 50%; background: #222; color: #fff; border: none; box-shadow: 0 2px 8px rgba(0,0,0,0.3); cursor: pointer;">▲</button>
-<button id="down-button" onclick="scrollDown(event)" style="position: fixed; bottom: 40px; right: 20px; z-index: 1000; padding: 12px 18px; font-size: 20px; border-radius: 50%; background: #222; color: #fff; border: none; box-shadow: 0 2px 8px rgba(0,0,0,0.3); cursor: pointer;">▼</button>
+<button id="up-button" class="scroll-button" onclick="scrollUp(event)">▲</button>
+<button id="down-button" class="scroll-button" onclick="scrollDown(event)">▼</button>
 </body>
-</html>
 </html>
