@@ -84,11 +84,16 @@ async function getnowimg() {
         try {
             const timeoutId = setTimeout(() => imageFetchAbortController.abort(), timeout);
             const response = await fetch(fullPath, { method: 'HEAD', signal: imageFetchAbortController.signal });
-            clearTimeout(timeoutId);
+            
             if (response.ok) {
                 if (requestId === currentImageRequestId) {
                     //gg
                 }
+                //test is image exist
+                if (response.headers.get('Content-Type') && response.headers.get('Content-Type').startsWith('image/')) {
+
+                }
+                clearTimeout(timeoutId);
                 return fullPath;
             }
         } catch (error) {
