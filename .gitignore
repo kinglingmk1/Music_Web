@@ -145,4 +145,5 @@ cover/
 Song/
 loved.json
 data.json
+project.json
 ./background/*
