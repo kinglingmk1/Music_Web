@@ -141,7 +141,8 @@ LDDC/
 lrc/
 background/
 music/
-
+cover/
+Song/
 loved.json
 data.json
 ./background/*

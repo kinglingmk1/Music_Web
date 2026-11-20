@@ -1,16 +1,21 @@
+<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Music Player</title>
     <link rel="stylesheet" href="index.css">
-    <script type="text/javascript" src="jquery.min.js"></script><!--Make it can offline use Source: https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js-->
-    <script type="text/javascript" src="playmusic.js"></script>
+    <script src="jsmediatags/dist/jsmediatags.min.js"></script>
+    <script defer src="playmusic.js"></script>
     <meta property="og:type" content="website">
     <meta property="og:title" content="Music Player">
+    <meta property="og:image" content="button/empty.png">
+    <meta name="twitter:image" content="button/empty.png">
 </head>
-<body style="background-size: cover; background-repeat: no-repeat; background-color:rgb(28, 29, 34);">
+<body class="music-page">
+
     <div>
-        <table id="song-lrc" style="width:20%">
+        <table id="song-lrc">
             <thead>
                 <tr>
                 </tr>
@@ -21,17 +26,17 @@
         </table>
     </div>
     <div class="player-container">
-        <!-- Existing Music Player Table -->
-        <div>
-            <table id="song-img" style="text-align: center;">
+        <div class="music-panel">
+            <table id="song-img" class="center-table">
                 <tr>
                     <td>
-                        <img id="background-image" class="album-image" alt="Background Image">
+                        <img id="background-image" class="album-image" alt="Album Cover">
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <h1 id="music-name" class="music-title"></h1>
+                        <h3 id="music-artist" class="music-artist"></h3>
                     </td>
                 </tr>
                 <tr>
@@ -41,42 +46,47 @@
                 </tr>
                 <tr>
                     <td>
-                        <input id="progress-bar" class="progress-bar" type="range" min="0" max="100" value="0" onchange="setProgress(this.value)">
+                        <input id="progress-bar" class="progress-bar" type="range" min="0" max="100" value="0">
+                    </td>
+                </tr>
+                <tr class="controls-row">
+                    <td class="controls-cell">
+                        <img id="prevBtn" class="smallbtn control-icon" src="button/backward.png" alt="Previous">
+                        <img class="control-spacer" src="button/empty.png" alt="">
+                        <img class="smallbtn control-icon" id="playBtn" src="button/play.png" alt="Play">
+                        <img class="control-spacer" src="button/empty.png" alt="">
+                        <img id="nextBtn" class="smallbtn control-icon" src="button/forward.png" alt="Next">
+                        <img class="control-spacer" src="button/empty.png" alt="">
+                        <img id="heartBtn" class="smallbtn control-icon" src="button/heart_off.png" alt="Heart">
+                        <img class="control-spacer" src="button/empty.png" alt="">
+                        <img id="listBtn" class="smallbtn control-icon" src="button/list.png" alt="Loved list">
+                        <img class="control-spacer" src="button/empty.png" alt="">
+                        <img class="smallbtn control-icon" src="button/random.png" alt="Random" id="randomBtn">
+                        <img class="control-spacer" src="button/empty.png" alt="">
+                        <img class="smallbtn control-icon" src="button/replay.png" alt="Repeat" id="replayBtn">
+                        <img class="control-spacer" src="button/empty.png" alt="">
+                        <img class="smallbtn control-icon" src="button/addSong.png" alt="Add Song" id="addSongBtn">
                     </td>
                 </tr>
                 <tr>
-                    <td style="display: flex; justify-content: center; align-items: center;">
-                        <img class="smallbtn control-icon" src="button/backward.png" alt="Back" onclick="backsong()">
-                        <img class="control-spacer" src="button/empty.png">
-                        <img class="smallbtn control-icon" id="playBtn" src="button/play.png" alt="Play" onclick="play()">
-                        <img class="smallbtn control-icon" id="pauseBtn" src="button/pause.png" alt="Pause" onclick="pause()">
-                        <img class="control-spacer" src="button/empty.png">
-                        <img class="smallbtn control-icon" src="button/forward.png" alt="Next" onclick="nextsong()">
-                        <img class="control-spacer" src="button/empty.png">
-                        <img class="smallbtn control-icon" src="button/heart_off.png" alt="Heart" onclick="love()">
-                        <img class="control-spacer" src="button/empty.png">
-                        <img class="smallbtn control-icon" src="button/list.png" alt="Heart" onclick="showLovedSong()">
-                        <img class="control-spacer" src="button/empty.png">
-                        <img class="smallbtn control-icon" src="button/random.png" alt="Heart" id="randomBtn" onclick="randomOnOff()">
-                        <img class="control-spacer" src="button/empty.png">
-                        <img class="smallbtn control-icon" src="button/replay.png" alt="Heart" id="replayBtn" onclick="replayOnOff()">
-                        <div style="display:none;">Loved Song</div></img>
+                    <td class="controls-cell">
+                        <input id="volume-bar" class="volume-bar" type="range" min="0" max="100" value="50">
                     </td>
                 </tr>
                 <tr>
-                    <td style="display: flex; justify-content: center; align-items: center;">
-                        <input id="volume-bar" class="volume-bar" type="range" min="0" max="100" value="50" oninput="setVolume(this.value)">
+                    <td class="controls-cell">
+                        <button type="button" class="local-library-button" id="loadFolderBtn">選擇音樂庫資料夾（含 data.json）</button>
                     </td>
                 </tr>
-                <tr>
+                <tr class="desktop-only">
                     <td>
-                        <div style="display:none;"><button class="smallbtn" id="loved-song-btn" onclick="showLovedSong()">Loved Song</button></div>
+                        <div class="hidden-container"><button class="smallbtn" id="loved-song-btn">Loved Song</button></div>
                     </td>
                 </tr>
             </table>
         </div>
         <div>
-            <table id="song-list" style="width:20%" class="songChangeButton">
+            <table id="song-list" class="songChangeButton">
                 <thead>
                     <tr>
                     </tr>
@@ -85,23 +95,24 @@
                     <!-- Song list will be dynamically populated -->
                 </tbody>
             </table>
-            <table id="loved-list" style="width:20%" class="lovedSongChangeButton">
+            <table id="loved-list" class="lovedSongChangeButton">
                 <thead>
                     <tr>
                     </tr>
                 </thead>
-                <tbody id="songChangeButton">
-                    <!-- Song list will be dynamically populated -->
+                <tbody id="lovedSongChangeButton">
+                    <!-- Loved song list will be dynamically populated -->
                 </tbody>
             </table>
         </div>
     </div>
-</div>
+
 <div id="content">
   <canvas id="canvas"></canvas>
 </div>
-<!-- Floating Up/Down Buttons -->
-<button id="up-button" class="scroll-button" onclick="scrollUp(event)">▲</button>
-<button id="down-button" class="scroll-button" onclick="scrollDown(event)">▼</button>
+<!-- Floating Buttons (Desktop only) -->
+<button id="up-button" class="scroll-button">▲</button>
+<button id="down-button" class="scroll-button">▼</button>
+
 </body>
 </html>
