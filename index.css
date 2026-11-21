@@ -77,6 +77,10 @@
     font-family: 'Noto Sans JP', Arial, sans-serif !important;
 }
 
+body.music-page {
+    background-color: #6b6259;
+}
+
 #background-image {
     transition: opacity 0.5s ease-in-out;
     opacity: 1;
