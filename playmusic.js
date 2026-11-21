@@ -445,6 +445,7 @@ function attachControlEventListeners() {
     document.getElementById('randomBtn')?.addEventListener('click', () => randomOnOff());
     document.getElementById('replayBtn')?.addEventListener('click', () => replayOnOff());
     document.getElementById('addSongBtn')?.addEventListener('click', () => addSong());
+    document.getElementById('addFolderBtn')?.addEventListener('click', () => loadLocalFolder());
     document.getElementById('loadFolderBtn')?.addEventListener('click', () => loadLocalFolder());
 
     // Scroll buttons
