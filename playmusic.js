@@ -895,6 +895,7 @@ function getImageExtension(imageFile) {
 
 async function persistImportedSongs(files, importedSongs) {
     if (!libraryDirectoryHandle) throw new Error('請先選擇可寫入的音樂庫資料夾。');
+    await libraryDirectoryHandle.getDirectoryHandle('cover', { create: true });
     const entries = [...(libraryManifest?.songs || [])];
     for (const song of importedSongs) {
         const audioFile = files.find(file => file.name === `${song.name}${song.ext}`);
