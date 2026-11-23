@@ -1,169 +1,230 @@
-<html>
+<!DOCTYPE html>
+<html lang="zh-TW">
 <head>
-    <title>Guide</title>
-    <link rel="stylesheet" type="text/css" href="index.css">
-    <script type="text/javascript" src="index.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player 使用指南</title>
+    <link rel="stylesheet" href="index.css">
+    <script defer src="index.js"></script>
 </head>
-<body style="background-color:#1f1f1f;">
-    <table style="width:70%;">
-        <tr>
-            <th style="width: 10%; text-align: left;">Guide</th>
-            <th style="width:90%;"></th>
-        </tr>
-        <tr>
-            <td style="width:10%;" center>
-                <button class="btn" onclick="unload(`description`)">Menu</button><br>
-                <button class="btn" onclick="unload(`index_html`)">index.html</button><br>
-                <button class="btn" onclick="unload(`index_css`)">index.css</button><br>
-                <button class="btn" onclick="unload(`data_json`)">data.json</button><br>
-                <button class="btn" onclick="unload(`loved_json`)">loved.json</button><br>
-                <button class="btn" onclick="unload(`lrc_format`)">lrc format</button><br>
-                <button class="btn" onclick="unload(`img`)">img</button><br>
-                <button class="btn" onclick="unload(`playmusic_js`)">playmusic.js</button>
-            </td>
-            <td style="width:90%; vertical-align: top;" class="description">
-                <div style="margin-top: 0; color: #fff;"></div>
-                    This guide is to help you to modify and customize the music player.<br>
-                    File structure:
-                    <pre style="background:#222; color:#fff; padding:10px; border-radius:6px;">
-                    ├── index.html
-                    ├── index.css
-                    ├── data.json
-                    ├── loved.json
-                    ├── lrc (folder)
-                    ├── img (folder)
-                    ├── background (folder)
-                    └── playmusic.js
-                    </pre>
-                    <br>
-                    by Kinglingmk1
-                </div>
-            </td>
-            <td style="width:90%; vertical-align: top;" class="index_html">
-                <div style="margin-top: 0;">
-                    index.html<br>
-                    This is the main HTML and the only page to display and play the music.<br>
-                    "id=lrc" is the table to show the lyrics by pushing tr and td<br>
-                    <br>
-                    There have two song lists<br>
-                    -song-list (a table to show all songs in data.json)<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;-songChangeButton<br>
-                    -love-list (a table to show all loved songs in loved.json)<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;-songChangeButton<br>
-                </div>
-            </td>
-            <td style="width:90%; vertical-align: top;" class="index_css">
-                <div style="margin-top: 0;">
-                    index.css
-                    Just a simple CSS file to style the player don't want explain it.
-                </div>
-            </td>
-            <td style="width:90%; vertical-align: top;" class="data_json">
-                <div style="margin-top: 0;">
-                    <strong>data.json</strong><br>
-                    Here is the format of <strong>data.json</strong> & <strong>loved.json</strong>:<br><br>
-                    <pre style="background:#222; color:#fff; padding:10px; border-radius:6px;">
-                {
-                    "songs": [
-                        {
-                            "fileNo": int,
-                            "musicName": "String",
-                            "backgroundRGB": "Hexadecimal number RGB"
-                        }
-                    ]
-                }
-                    </pre>
-                    <br>
-                    <strong>Important:</strong> The <code>fileNo</code> must be the same and unique as the music file name, img, and lrc.<br>
-                    <br>
-                    <strong>Example:</strong>
-                    <pre style="background:#222; color:#fff; padding:10px; border-radius:6px;">
-                {
-                    "songs": [
-                        {
-                            "fileNo": 1,
-                            "musicName": "Song 1",
-                            "backgroundRGB": "ff0000"
-                        },
-                        {
-                            "fileNo": 2,
-                            "musicName": "Song 2",
-                            "backgroundRGB": "00ff00"
-                        }
-                    ]
-                }
-                    </pre>
-                </div>
-            </td>
-            <td style="width:90%; vertical-align: top;" class="loved_json">
-                <div style="margin-top: 0;">
-                    loved.json<br>
-                    see data.json
-                </div>
-            </td>
-            <td style="width:90%; vertical-align: top;" class="lrc_format">
-                <div style="margin-top: 0;">
-                    lrc_format<br>
-                    only accept [xx:xx.xx] for lrc and the lrc name is same as the music file name (integer)
-                    <br>
-                    <strong>Example:</strong>
-                    <pre style="background:#222; color:#fff; padding:10px; border-radius:6px;">
-                [00:00.00] Line 1
-                [00:01.00] Line 2
-                [00:02.00] Line 3
-                    </pre>
-                </div>
-            </td>
-            <td style="width:90%; vertical-align: top;" class="img">
-                <div style="margin-top: 0;">
-                    img<br>
-                    only accept the same name as the music file name (integer)<br>
-                    The file format now only accept .jpg, .png, .gif, .jpeg, .webp, .jifi and the best size is 1200x1200<br>
-                    You can modify the js if you want to add more format<br>
-                </div>
-            </td>
-            <td style="width:90%; vertical-align: top;" class="playmusic_js">
-                <div style="margin-top: 0;">
-                    playmusic.js<br>
-                    This file is responsible for playing the music files and handling the player controls.<br>
-                    This pages will show all element and function in this file.<br><br>
-                    <strong>On Load:</strong><br>
-                    - Read the data in data.json and loved.json<br>
-                    - Try load the first song lrc data<br>
-                    - call function songChange() - see below<br>
+<body> 
+    <div class="language-switcher" aria-label="Language selector">
+        <label for="guide-language" data-i18n="languageLabel">Language</label>
+        <select id="guide-language">
+            <option value="zh-TW">繁體中文</option>
+            <option value="zh-CN">简体中文</option>
+            <option value="ja">日本語</option>
+            <option value="ko">한국어</option>
+            <option value="en">English</option>
+        </select>
+    </div>
 
-                    <strong>Functions:</strong><br>
-                    getnowplaying() - Return the path that current playing. Default is /music/1.mp3<br>
-                    getnowimg() - Return the path that current playing image. Default is /img/1.jpg<br>
-                    updatePlaytime() - Display the current song playing time and call loadlrc()<br>
-                    songChange():<br>
-                    - Create the song list and love list button load from JSON data<br>
-                    - Play / Pause the music<br>
-                    - Volume control and display<br>
-                    - Auto play the next song when the current song ended<br>
-                    - End of list will return to the first song<br>
-                    - Check the song is in the love list and display the loved button accordingly<br>
-                    play() - Play the current song and change the button image to pause button<br>
-                    pause() - Pause the current song and change the button image to play button<br> 
-                    backsong() - Detect the current song and play the previous song in the list
-                    nextsong() - Detect the current song and play the next song in the list<br>
-                    setProgress(value) - Set the audio duration of the current song<br>
-                    updateProgressBar() - Update the progress bar based on the current audio time<br>
-                    loadlrc() - Load the LRC file for the current song and display it<br>
-                    <del>love() - Add or remove the current song from the love list and update loved.json</del><br>
-                    <del>saveLovedSong() - Save the current song to the love list and update loved.json</del><br>
-                    <del>removeLovedSong() - Remove the current song from the love list and update loved.json</del><br>
-                    showLovedSong() - Switch between showing loved songs and all songs <br>
-                    createLrcElement(time, text) - Create a table row for each line of the LRC file<br>
-                    setVolume(value) - Set the volume of the audio player
-
+    <div class="page-shell">
+        <aside class="sidebar" aria-label="指南章節">
+            <div class="brand">
+                <div class="brand-mark" aria-hidden="true">♫</div>
+                <div>
+                    <strong>Music Player</strong>
+                    <span data-i18n="guideTitle">使用指南</span>
                 </div>
-            </td>
-        </tr>
-        <tr>
-            <td style="width:30%;"></td>
-            <td style="width:70%;"></td>
-        </tr>
-    </table>
+            </div>
+
+            <aside class="translation-notice" id="translation-notice" role="note" data-i18n="translationNotice">
+                此指南使用 AI 翻譯，部分內容可能不完全準確。
+            </aside>
+
+            <label class="search" for="guide-search">
+                <span aria-hidden="true">⌕</span>
+                <input id="guide-search" type="search" placeholder="搜尋指南" data-i18n-placeholder="searchGuide">
+            </label>
+
+            <nav class="nav-list">
+                <a class="nav-link active" href="#quick-start" data-section="quick-start" data-i18n="navQuick">快速開始</a>
+                <a class="nav-link" href="#select-folder" data-section="select-folder" data-i18n="navFolder">選擇音樂庫資料夾</a>
+                <a class="nav-link" href="#add-songs" data-section="add-songs" data-i18n="navAdd">新增歌曲</a>
+                <a class="nav-link" href="#library-layout" data-section="library-layout" data-i18n="navLayout">資料夾結構</a>
+                <a class="nav-link" href="#data-json" data-section="data-json" data-i18n="navData">data.json 格式</a>
+                <a class="nav-link" href="#lrc" data-section="lrc" data-i18n="navLrc">LRC 歌詞規則</a>
+                <a class="nav-link" href="#cover-background" data-section="cover-background" data-i18n="navAssets">封面與背景圖</a>
+                <a class="nav-link" href="#loved-songs" data-section="loved-songs" data-i18n="navLoved">喜愛清單</a>
+                <a class="nav-link" href="#troubleshooting" data-section="troubleshooting" data-i18n="navTroubleshooting">疑難排解</a>
+            </nav>
+
+            <a class="back-link" href="../index.html" data-i18n="backToPlayer">← 返回音樂播放器</a>
+        </aside>
+
+        <main class="document">
+            <article>
+                <header class="document-header">
+                    <p class="eyebrow" data-i18n="documentationEyebrow">MUSIC PLAYER DOCUMENTATION</p>
+                    <h1 data-i18n="guideTitle">使用指南</h1>
+                    <p class="lead" data-i18n="lead">選擇本機音樂庫、新增歌曲、設定封面與歌詞，並讓播放器自動更新 <code>data.json</code>。</p>
+                </header>
+
+                <section id="quick-start" class="guide-section">
+                    <h2 data-i18n="quickTitle">快速開始</h2>
+                    <div class="steps">
+                        <div class="step">
+                            <span class="step-number">1</span>
+                            <div><strong data-i18n="quickStep1Title">選擇資料夾</strong><p data-i18n="quickStep1Text">開啟播放器，按下資料夾圖示。</p></div>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">2</span>
+                            <div><strong data-i18n="quickStep2Title">選取音樂庫根目錄</strong><p data-i18n="quickStep2Text">請選擇包含 <code>data.json</code>、<code>Song</code>、<code>cover</code> 或 <code>lrc</code> 的資料夾。</p></div>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">3</span>
+                            <div><strong data-i18n="quickStep3Title">開始播放</strong><p data-i18n="quickStep3Text">載入完成後即可從右側歌曲清單選擇歌曲。</p></div>
+                        </div>
+                    </div>
+                    <aside class="callout callout-info">
+                        <strong data-i18n="supportedBrowser">支援瀏覽器</strong>
+                        <p data-i18n="browserText">新增或更新本機資料夾需要支援 <strong>File System Access API</strong> 的瀏覽器，例如桌面版 Chromium 系瀏覽器。Wallpaper Engine 請使用 Chromium 版本的網頁。</p>
+                    </aside>
+                </section>
+
+                <section id="select-folder" class="guide-section">
+                    <h2 data-i18n="folderTitle">選擇音樂庫資料夾</h2>
+                    <ol class="instructions">
+                        <li data-i18n="folderStep1">開啟播放器頁面 <code>index.html</code>。</li>
+                        <li data-i18n="folderStep2">按下底部控制列的資料夾圖示。</li>
+                        <li data-i18n="folderStep3">在檔案選擇視窗中選擇<strong>音樂庫的根資料夾</strong>，不是單獨選取音樂檔案。</li>
+                        <li data-i18n="folderStep4">確認瀏覽器要求的讀取／寫入權限後，播放器會讀取 <code>data.json</code> 並載入歌曲。</li>
+                    </ol>
+                    <div class="figure">
+                        <img src="select_folder.png" alt="選擇資料夾示意畫面">
+                        <p data-i18n="figureCaption">選擇包含音樂庫資源的資料夾，而不是選擇某一首歌曲。</p>
+                    </div>
+                </section>
+
+                <section id="add-songs" class="guide-section">
+                    <h2 data-i18n="addTitle">新增歌曲</h2>
+                    <ol class="instructions">
+                        <li data-i18n="addStep1">按下播放器控制列中的<strong>新增歌曲</strong>圖示（加號圖示）。</li>
+                        <li data-i18n="addStep2">選擇一首或多首音訊檔。支援：<code>.mp3</code>、<code>.flac</code>、<code>.ogg</code>、<code>.wav</code>、<code>.m4a</code>。</li>
+                        <li data-i18n="addStep3">如尚未連結資料夾，播放器會要求選擇音樂庫資料夾。</li>
+                        <li data-i18n="addStep4">確認後，音訊會存入 <code>Song/</code>；內嵌封面會存入 <code>cover/</code>；播放器會自動更新 <code>data.json</code>。</li>
+                    </ol>
+                    <aside class="callout callout-warning">
+                        <strong data-i18n="lrcNameImportant">同名規則很重要</strong>
+                        <p data-i18n="lrcNameText">若要使用 LRC，歌詞檔名必須和音樂檔名完全相同。例如音樂是 <code>My Song.mp3</code>，LRC 就必須是 <code>My Song.lrc</code>；副檔名不同，不含副檔名的檔名要一致。</p>
+                    </aside>
+                </section>
+
+                <section id="library-layout" class="guide-section">
+                    <h2 data-i18n="layoutTitle">資料夾結構</h2>
+                    <p data-i18n="layoutIntro">建議使用下列結構：</p>
+                    <pre><code>音樂庫/
+├── data.json
+├── loved.json
+├── Song/
+│   ├── My Song.mp3
+│   └── Another Song.flac
+├── cover/
+│   ├── My Song.jpg
+│   └── Another Song.png
+├── lrc/
+│   ├── My Song.lrc
+│   └── Another Song.lrc
+└── background/
+    └── My Song.jpg</code></pre>
+                    <p data-i18n="layoutNote"><code>cover</code>、<code>lrc</code> 和 <code>background</code> 資料夾可由匯入流程自動建立。</p>
+                </section>
+
+                <section id="data-json" class="guide-section">
+                    <h2 data-i18n="dataTitle">data.json 格式</h2>
+                    <p data-i18n="dataIntro"><code>data.json</code> 是音樂庫清單。通常由播放器在新增歌曲時自動產生，不需要手動維護。</p>
+                    <pre><code>{
+  "version": 1,
+  "songs": [
+    {
+      "name": "My Song",
+      "audio": "Song/My Song.mp3",
+      "cover": "cover/My Song.jpg",
+      "lrc": "lrc/My Song.lrc",
+      "background": null,
+      "metadata": {
+        "title": "My Song",
+        "artist": "Artist Name",
+        "album": "Album Name",
+        "track": 1
+      }
+    }
+  ]
+}</code></pre>
+                    <dl class="field-list">
+                        <div><dt>name</dt><dd data-i18n="fieldName">歌曲的唯一識別名稱，應與同名資源的檔名一致。</dd></div>
+                        <div><dt>audio</dt><dd data-i18n="fieldAudio">音訊檔案相對於音樂庫根目錄的路徑。</dd></div>
+                        <div><dt>cover / lrc / background</dt><dd data-i18n="fieldAssets">對應資源的相對路徑；沒有該資源可設為 <code>null</code>。</dd></div>
+                        <div><dt>metadata</dt><dd data-i18n="fieldMetadata">標題、演出者、專輯與曲目資訊；播放器可能讀取音訊內嵌標籤。</dd></div>
+                    </dl>
+                </section>
+
+                <section id="lrc" class="guide-section">
+                    <h2 data-i18n="lrcTitle">LRC 歌詞規則</h2>
+                    <aside class="callout callout-danger">
+                        <strong data-i18n="lrcFilenameTitle">檔名必須一致</strong>
+                        <p data-i18n="lrcFilenameText">LRC 檔名必須與音樂檔名相同（不含副檔名）。例如：</p>
+                        <div class="name-match"><code>Song/Dream.mp3</code><span>↔</span><code>lrc/Dream.lrc</code></div>
+                    </aside>
+                    <p data-i18n="lrcPlacement">LRC 可放在與音樂檔相同層級，或放在 <code>lrc/</code> 資料夾。當在連結資料夾模式下匯入歌曲時，播放器會尋找與音訊檔名相同的 LRC。</p>
+                    <pre><code>[00:00.00] 第一行歌詞
+[00:04.25] 第二行歌詞
+[00:08.50] 第三行歌詞</code></pre>
+                    <p data-i18n="lrcFormatText">時間格式可使用 <code>[mm:ss.xx]</code>，其中分鐘與秒數為數字，小數部分為百分之一秒。</p>
+                </section>
+
+                <section id="cover-background" class="guide-section">
+                    <h2 data-i18n="assetsTitle">封面與背景圖</h2>
+                    <div class="card-grid">
+                        <article class="info-card">
+                            <h3 data-i18n="coverTitle">封面圖</h3>
+                            <p data-i18n="coverText">支援 <code>.jpg</code>、<code>.jpeg</code>、<code>.png</code>、<code>.webp</code>、<code>.gif</code>。建議放置於 <code>cover/</code>，檔名和歌曲名稱一致。</p>
+                        </article>
+                        <article class="info-card">
+                            <h3 data-i18n="backgroundTitle">背景圖</h3>
+                            <p data-i18n="backgroundText">支援相同格式。建議放置於 <code>background/</code>，檔名和歌曲名稱一致。未設定時播放器會嘗試使用封面。</p>
+                        </article>
+                        <article class="info-card">
+                            <h3 data-i18n="embeddedTitle">內嵌封面</h3>
+                            <p data-i18n="embeddedText">如果音訊檔內含封面資訊，匯入時可自動擷取並儲存到 <code>cover/</code>。</p>
+                        </article>
+                    </div>
+                </section>
+
+                <section id="loved-songs" class="guide-section">
+                    <h2 data-i18n="lovedTitle">喜愛清單</h2>
+                    <p data-i18n="lovedText">按下愛心按鈕可以新增或移除喜愛歌曲。清單會儲存在瀏覽器的本機儲存空間；連結音樂庫資料夾後，也會嘗試將內容寫入根目錄的 <code>loved.json</code>。</p>
+                    <pre><code>[
+  "My Song",
+  "Another Song"
+]</code></pre>
+                    <p data-i18n="lovedNote"><code>loved.json</code> 的項目是歌曲的 <code>name</code>，不是檔案路徑。</p>
+                </section>
+
+                <section id="troubleshooting" class="guide-section">
+                    <h2 data-i18n="troubleshootingTitle">疑難排解</h2>
+                    <div class="faq">
+                        <details>
+                            <summary data-i18n="faq1Title">沒有任何歌曲載入</summary>
+                            <p data-i18n="faq1Text">請確認選擇的是包含 <code>data.json</code> 的音樂庫根目錄，以及 <code>data.json</code> 中的 <code>audio</code> 路徑與實際檔案相符。</p>
+                        </details>
+                        <details>
+                            <summary data-i18n="faq2Title">歌詞沒有顯示</summary>
+                            <p data-i18n="faq2Text">確認副檔名為 <code>.lrc</code>；音樂檔名稱不含副檔名後，必須和 LRC 檔名稱完全相同。也請確認時間標記格式正確。</p>
+                        </details>
+                        <details>
+                            <summary data-i18n="faq3Title">瀏覽器無法選擇資料夾</summary>
+                            <p data-i18n="faq3Text">請使用支援 File System Access API 的桌面 Chromium瀏覽器。</p>
+                        </details>
+                        <details>
+                            <summary data-i18n="faq4Title">無法找到新增的歌曲</summary>
+                            <p data-i18n="faq4Text">確認檔案副檔名受支援，再重新選擇資料夾或重新整理頁面。</p>
+                        </details>
+                    </div>
+                </section>
+            </article>
+        </main>
+    </div>
 </body>
 </html>
