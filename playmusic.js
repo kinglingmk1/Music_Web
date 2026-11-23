@@ -382,7 +382,7 @@ async function initializePlayer() {
         await activateLibrary(await readManifestFromPage());
     } catch (error) {
         console.warn('無法直接讀取 data.json，請選擇本機音樂庫資料夾。', error);
-        document.getElementById('music-name').textContent = '請選擇音樂庫資料夾讀取 data.json';
+        document.getElementById('music-name').innerHTML = '請選擇音樂庫資料夾讀取 data.json<br>Please select the music library folder to load data.json</b>';
         document.getElementById('music-artist').style.display = 'none';
     }
 }
@@ -400,7 +400,7 @@ async function activateLibrary(manifest, directoryHandle = null, selectedFiles =
         : await createSongsFromManifest(manifest, directoryHandle);
     lovedSongNames = new Set(await readLovedSongs(selectedFiles || [], directoryHandle));
     if (!songs.length) {
-        document.getElementById('music-name').textContent = 'data.json 中沒有歌曲';
+        document.getElementById('music-name').innerHTML = 'data.json 中沒有歌曲<br>No songs found in data.json';
         renderSongList();
         return;
     }
@@ -956,7 +956,7 @@ async function persistImportedSongs(files, importedSongs) {
 async function addLocalFiles(files, replaceLibrary) {
     if (!files.length) return;
     if (!files.some(file => AUDIO_EXTENSIONS.test(file.name))) {
-        alert('找不到支援的音訊檔（MP3、FLAC、OGG、WAV、M4A）。\nNo supported audio files found (MP3, FLAC, OGG, WAV, M4A).');
+        alert('找不到支援的音訊檔（MP3、FLAC、OGG、WAV、M4A）。\n Cannot find supported audio files (MP3, FLAC, OGG, WAV, M4A).');
         return;
     }
 
@@ -1037,7 +1037,7 @@ async function chooseImportFiles(onFiles) {
     }, { once: true });
     fileInput.click();
 }
-function chooseLibraryDirectory(message = "請選擇要儲存歌曲及更新 data.json 的音樂庫資料夾。") {
+function chooseLibraryDirectory(message = "請選擇要儲存歌曲及更新 data.json 的音樂庫資料夾。<br> Please select the music library folder to save songs and update data.json.") {
     return new Promise((resolve, reject) => {
         const overlay = document.createElement("div");
         overlay.setAttribute("role", "dialog");
@@ -1064,10 +1064,10 @@ function chooseLibraryDirectory(message = "請選擇要儲存歌曲及更新 dat
         messageElement.textContent = message;
         const chooseButton = document.createElement("button");
         chooseButton.type = "button";
-        chooseButton.textContent = "選擇音樂庫資料夾";
+        chooseButton.textContent = "選擇音樂庫資料夾<br> Please select the music library folder";
         const cancelButton = document.createElement("button");
         cancelButton.type = "button";
-        cancelButton.textContent = "取消";
+        cancelButton.textContent = "取消<br> Cancel";
         cancelButton.style.marginLeft = "12px";
         const cleanup = () => overlay.remove();
         chooseButton.addEventListener("click", () => {
@@ -1093,7 +1093,7 @@ function chooseLibraryDirectory(message = "請選擇要儲存歌曲及更新 dat
 async function addSong() {
     await chooseImportFiles(async (files) => {
         if (!files.some(file => AUDIO_EXTENSIONS.test(file.name))) {
-            alert("請選擇支援的音訊檔（MP3、FLAC、OGG、WAV、M4A）。\nNo supported audio files found (MP3, FLAC, OGG, WAV, M4A).");
+            alert("請選擇支援的音訊檔（MP3、FLAC、OGG、WAV、M4A）。\nPlease select supported audio files (MP3, FLAC, OGG, WAV, M4A).");
             return;
         }
         try {
