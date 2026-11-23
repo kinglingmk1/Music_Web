@@ -332,20 +332,20 @@ async function saveLovedSongs() {
     }
     if (!libraryDirectoryHandle) {
         if (typeof window.showDirectoryPicker !== "function") {
-            alert("喜愛清單已保存在此瀏覽器，但目前瀏覽器不支援更新本機 loved.json。");
+            alert("喜愛清單已保存在此瀏覽器，但目前瀏覽器不支援更新本機 loved.json。\nUnable to update loved.json because this browser does not support the File System Access API.");
             return;
         }
         try {
-            const directoryHandle = await chooseLibraryDirectory("請選擇要儲存 loved.json 的音樂庫資料夾。");
+            const directoryHandle = await chooseLibraryDirectory("請選擇要儲存 loved.json 的音樂庫資料夾。\nPlease select the library folder to save loved.json.");
             libraryManifest = await readManifestFromDirectory(directoryHandle);
             libraryDirectoryHandle = directoryHandle;
         } catch (error) {
             if (error.name === "AbortError") {
-                alert("喜愛清單已保存在此瀏覽器，但未更新 loved.json。");
+                alert("喜愛清單已保存在此瀏覽器，但未更新 loved.json。\nUnable to update loved.json because the folder selection was cancelled.");
                 return;
             }
             console.error("連結音樂庫資料夾失敗：", error);
-            alert(`無法選擇音樂庫資料夾：${error.message}`);
+            alert(`無法選擇音樂庫資料夾：${error.message}\n Unable to choose library folder because of: ${error.message}`);
             return;
         }
     }
@@ -353,7 +353,7 @@ async function saveLovedSongs() {
         await writeDirectoryFile(libraryDirectoryHandle, "loved.json", JSON.stringify(names, null, 2));
     } catch (error) {
         console.error("無法儲存 loved.json：", error);
-        alert(`無法儲存喜愛清單：${error.message}`);
+        alert(`無法儲存喜愛清單：${error.message}\nUnable to save loved.json because of: ${error.message}`);
     }
 }
 function warnStorageUnavailable(error) {
@@ -956,7 +956,7 @@ async function persistImportedSongs(files, importedSongs) {
 async function addLocalFiles(files, replaceLibrary) {
     if (!files.length) return;
     if (!files.some(file => AUDIO_EXTENSIONS.test(file.name))) {
-        alert('找不到支援的音訊檔（MP3、FLAC、OGG、WAV、M4A）。');
+        alert('找不到支援的音訊檔（MP3、FLAC、OGG、WAV、M4A）。\nNo supported audio files found (MP3, FLAC, OGG, WAV, M4A).');
         return;
     }
 
@@ -999,7 +999,7 @@ async function loadLocalFolder() {
         } catch (error) {
             if (error.name === 'AbortError') return;
             console.error('載入音樂庫資料夾失敗：', error);
-            alert(`無法讀取音樂庫：${error.message}`);
+            alert(`無法讀取音樂庫：${error.message}\nUnable to load the library because of: ${error.message}`);
         }
         return;
     }
@@ -1020,7 +1020,7 @@ async function loadLocalFolder() {
             }
         } catch (error) {
             console.error('載入本機音樂資料夾失敗：', error);
-            alert('無法載入所選資料夾，請確認資料夾中包含可播放的音訊檔。');
+            alert('無法載入所選資料夾，請確認資料夾中包含可播放的音訊檔。\nUnable to load the selected folder. Please ensure it contains playable audio files.');
         }
     }, { once: true });
     input.click();
@@ -1093,12 +1093,12 @@ function chooseLibraryDirectory(message = "請選擇要儲存歌曲及更新 dat
 async function addSong() {
     await chooseImportFiles(async (files) => {
         if (!files.some(file => AUDIO_EXTENSIONS.test(file.name))) {
-            alert("請選擇支援的音訊檔（MP3、FLAC、OGG、WAV、M4A）。");
+            alert("請選擇支援的音訊檔（MP3、FLAC、OGG、WAV、M4A）。\nNo supported audio files found (MP3, FLAC, OGG, WAV, M4A).");
             return;
         }
         try {
             if (!libraryDirectoryHandle && typeof window.showDirectoryPicker !== "function") {
-                throw new Error("目前瀏覽器不支援選擇可寫入的音樂庫資料夾，無法儲存歌曲。");
+                throw new Error("目前瀏覽器不支援選擇可寫入的音樂庫資料夾，無法儲存歌曲。\nUnable to choose a writable library folder because this browser does not support the File System Access API.");
             }
             let destinationHandle = libraryDirectoryHandle;
             if (!destinationHandle) {
@@ -1111,11 +1111,11 @@ async function addSong() {
             }
             const manifest = await persistImportedSongs(files, importedSongs);
             await activateLibrary(manifest, destinationHandle);
-            alert("歌曲已儲存到所選音樂庫，data.json 已更新。");
+            alert("歌曲已儲存到所選音樂庫，data.json 已更新。\nSongs saved to the selected library, data.json updated.");
         } catch (error) {
             if (error.name === "AbortError") return;
             console.error("[Music Import] failed:", error);
-            alert(`匯入歌曲失敗：${error.message}`);
+            alert(`匯入歌曲失敗：${error.message}\nFailed to import songs because of: ${error.message}`);
         }
     });
 }
@@ -1152,7 +1152,7 @@ function showLovedSong() {
 
     if (isShowingLovedOnly) {
         if (lovedSongNames.size === 0) {
-            alert('沒有喜愛的歌曲！');
+            alert('沒有喜愛的歌曲！\nNo loved songs found.');
             isShowingLovedOnly = false;
             return;
         }
@@ -1293,18 +1293,34 @@ function ensureVisualizer() {
 }
 
 // --- Scroll control ---
-function scrollUp(e) { 
-    e.preventDefault(); 
-    getActiveList().scrollBy({ top: -300, behavior: 'smooth' }); 
+function scrollUp(e) {
+    e?.preventDefault();
+    scrollActiveList(-300);
 }
 
-function scrollDown(e) { 
-    e.preventDefault(); 
-    getActiveList().scrollBy({ top: 300, behavior: 'smooth' }); 
+function scrollDown(e) {
+    e?.preventDefault();
+    scrollActiveList(300);
 }
 
-function getActiveList() { 
-    return isShowingLovedOnly ? document.getElementById('lovedSongChangeButton') : document.getElementById('songChangeButton'); 
+function scrollActiveList(distance) {
+    const list = getActiveList();
+    if (!list) return;
+
+    const scrollAmount = Math.max(120, Math.round(list.clientHeight * 0.75));
+    const amount = distance < 0 ? -scrollAmount : scrollAmount;
+
+    if (typeof list.scrollBy === 'function') {
+        list.scrollBy({ top: amount, behavior: 'smooth' });
+    } else {
+        list.scrollTop += amount;
+    }
+}
+
+function getActiveList() {
+    return isShowingLovedOnly
+        ? document.getElementById('loved-list')
+        : document.getElementById('song-list');
 }
 
 // Initialize
